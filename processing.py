@@ -60,6 +60,24 @@ def beat_annotations(annotation):
     return annotation
 
 
+def allNewSignal(records, signal, anno):
+    """ Process all records to the target frequency containing symbol ['N'] \n
+        Records = records of all dataset readings \n
+        Signal = records of all signals \n
+        Annos = Annotation of all records
+    """
+    newSignals = []
+    newAnnos = []
+    for i, e in enumerate(records):
+        # Processing each sample frequency
+        eachSignals, eachAnnos = processing.resample_singlechan(signal[i][:, 0], anno[i], fs, fs_target)
+        newSignals.append(eachSignals)
+        eachNAnnos = beat_annotations(eachAnnos)
+        newAnnos.append(eachNAnnos)
+    return newSignals, newAnnos
+
+#------------------- CHF Unhealthy ECG Below --------------------
+
 
 # CHF Unhealthy beats
 chfRecords = get_records('files', 'ecg')
@@ -75,26 +93,22 @@ annos = getAnn(chfRecords, 'ecg')
 fs = fields[0]['fs'] # Original frequency
 fs_target = 128 # Target frequency
 
-def allNewSignal(chfRecords):
-    """ Process all records to the target frequency containing symbol ['N']  """
-    newSignals = []
-    newAnnos = []
-    for i, e in enumerate(chfRecords):
-        # Processing each sample frequency
-        eachSignals, eachAnnos = processing.resample_singlechan(signals[i][:, 0], annos[i], fs, fs_target)
-        newSignals.append(eachSignals)
-        eachNAnnos = beat_annotations(eachAnnos)
-        newAnnos.append(eachNAnnos)
-    return newSignals, newAnnos
 
 # New Unhealthy signal 128 Frequency!!
-newSignals, newAnnos = allNewSignal(chfRecords) 
+newSignals, newAnnos = allNewSignal(chfRecords, signals, annos) 
 
 
 
 #------------------- MIT-BIH Healthy ECG Below --------------------
 
+# Healthy ECG
+mitRecords = get_records('MIT-BIH-Healthy', 'atr')
 
+# MIT signals and fields
+mitSignals, mitFields = getSignal(mitRecords)
 
+# MIT Anno
+mitAnnos = getAnn(mitRecords, 'atr')
 
+newMitSignals, newMitAnnos = allNewSignal(mitRecords,mitSignals, mitAnnos)
 
