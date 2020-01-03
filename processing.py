@@ -218,6 +218,7 @@ healthyDF.insert(1, "Status", healtyDFLabel, True)
 # ---------------- Concating Both dataset into one ----------------------
 
 phatDataset = pd.concat([unhealtyDF, healthyDF])
+phatDataset.index.name="Record"
 
 # dataset = pd.concat([df, healthyDf])
 
@@ -227,6 +228,7 @@ phatDataset = pd.concat([unhealtyDF, healthyDF])
 # ---------------- Export Dataset to CSV for train/test  ----------------------
 
 # dataset.to_csv('dataset', index=False)
+phatDataset.to_csv('phatDataset', index=True )
 
 
-# read_csv = pd.read_csv('dataset')
+read_csv = pd.read_csv('phatDataset')
