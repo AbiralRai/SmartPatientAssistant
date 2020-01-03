@@ -13,9 +13,8 @@ from scipy import signal
 from wfdb import processing
 # import pdb #debugger
 
-ecg = pd.read_csv('ECG5000_TEST.txt')
+read_csv = pd.read_csv('dataset')
 
-print(df.describe())
 
 def get_records(route,format):
     """ Get paths for data in data/mit/ directory """
@@ -98,6 +97,13 @@ def getEachRecordNames(records):
     for name in records:
         names.append(name.record_name)
     return names
+
+def getDfIndex(name):
+    indexName = []
+    for i in range(len(newSignals[0])):
+        indexName.append(f'{name}-{i}')
+    return indexName
+
 #------------------- CHF Unhealthy ECG Below --------------------
 
 
@@ -125,8 +131,21 @@ recordNames = getEachRecordNames(newAnnos)
 # Convert signals to Dataframe using pandas
 df = pd.DataFrame(data=newSignals, index= recordNames)
 
-dfT = df.T # Transpose DF
 
+# UnhealthyLabel = [1]*len(recordNames)
+
+# df.insert(0, "Label", UnhealthyLabel, True) 
+
+
+dfT = df.T # Transpose DF
+dfT.set_index(recordNames)
+
+
+# ------------- Test df append ---------------------
+# dfIndex =getDfIndex("chf01")
+# singleDF = dfT['chf01'].tolist() 
+# testDF = pd.DataFrame(index=dfIndex,data = singleDF)
+# testDF = testDF.append(dfT['chf02'])
 
 
 #------------------- MIT-BIH Healthy ECG Below --------------------
@@ -142,3 +161,72 @@ mitAnnos = getAnn(mitRecords, 'atr')
 
 newMitSignals, newMitAnnos = allNewSignal(mitRecords,mitSignals, mitAnnos)
 
+mitRecordNames = getEachRecordNames(newMitAnnos)
+
+healthyDf = pd.DataFrame(data=newMitSignals, index=mitRecordNames)
+
+# healthyLablel = [0]*len(mitRecordNames)
+
+# healthyDf.insert(0, "Label", healthyLablel, True)
+
+healthyDfT = healthyDf.T # Transpose DF
+healthyDfT.set_index(mitRecordNames)
+
+
+#------------------- Combinning every record into single column --------------------
+
+def dfSingleRow(names, dfT):
+    df = pd.DataFrame()
+    totalRow = 0
+    for name in names:
+        dfIndex = getDfIndex(name)
+        singleDF = dfT[name].tolist()
+        tempDF = pd.DataFrame(index=dfIndex, data=singleDF)
+        df = df.append(tempDF)
+        totalRow = totalRow + len(singleDF)
+        # totalRow = totalRow + 
+    return [df, totalRow]
+        
+
+#------------------- Combinning UNHEALTHY record into single column --------------------
+
+# Returns single row of every unhealthy ecg data total num of rows
+[unhealtyDF, totalRow] = dfSingleRow(recordNames, dfT)
+
+#Renaming ECG column
+unhealtyDF.rename(columns = {0:'ECG'}, inplace = True) 
+
+unhealtyDFLabel = [1] * totalRow
+
+unhealtyDF.insert(1, "Status", unhealtyDFLabel, True)
+
+
+#------------------- Combinning HEALTHY record into single column --------------------
+
+# Returns single row of every unhealthy ecg data total num of rows
+[healthyDF, healthyTotalRow] = dfSingleRow(mitRecordNames,healthyDfT)
+
+#Renaming ECG column
+healthyDF.rename(columns = {0:'ECG'}, inplace = True) 
+
+healtyDFLabel = [0] * healthyTotalRow
+
+healthyDF.insert(1, "Status", healtyDFLabel, True)
+
+
+
+# ---------------- Concating Both dataset into one ----------------------
+
+phatDataset = pd.concat([unhealtyDF, healthyDF])
+
+# dataset = pd.concat([df, healthyDf])
+
+# Tdataset = dataset.T # Rows to Column
+
+
+# ---------------- Export Dataset to CSV for train/test  ----------------------
+
+# dataset.to_csv('dataset', index=False)
+
+
+# read_csv = pd.read_csv('dataset')
