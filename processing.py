@@ -13,8 +13,8 @@ from scipy import signal
 from wfdb import processing
 # import pdb #debugger
 
-read_csv = pd.read_csv('dataset')
-
+firstDataset = pd.read_csv('dataset')
+secondDataset = pd.read_csv('phatDataset')
 
 def get_records(route,format):
     """ Get paths for data in data/mit/ directory """
@@ -86,6 +86,8 @@ def allNewSignal(records, signal, anno):
     for i, e in enumerate(records):
         # Processing each sample frequency
         eachSignals, eachAnnos = processing.resample_singlechan(signal[i][:, 0], anno[i], fs, fs_target) 
+        # Normalize heart beat to lb=0 and ub=1 
+        eachSignals = processing.normalize_bound(eachSignals)
         newSignals.append(eachSignals)
         eachNAnnos = beat_annotations(eachAnnos)
         newAnnos.append(eachNAnnos)
@@ -123,7 +125,7 @@ fs_target = 128 # Target frequency
 
 
 # New Unhealthy signal 128 Frequency!!
-newSignals, newAnnos = allNewSignal(chfRecords, signals, annos) 
+newSignals, newAnnos = allNewSignal(chfRecords, signals, annos)
 
 
 recordNames = getEachRecordNames(newAnnos)
@@ -217,18 +219,30 @@ healthyDF.insert(1, "Status", healtyDFLabel, True)
 
 # ---------------- Concating Both dataset into one ----------------------
 
-phatDataset = pd.concat([unhealtyDF, healthyDF])
-phatDataset.index.name="Record"
+Dataset = pd.concat([unhealtyDF, healthyDF])
+Dataset.index.name="Record"
+rowDataset.index.name="Record"
 
-# dataset = pd.concat([df, healthyDf])
+rowDataset = pd.concat([df, healthyDf])
 
-# Tdataset = dataset.T # Rows to Column
 
 
 # ---------------- Export Dataset to CSV for train/test  ----------------------
 
 # dataset.to_csv('dataset', index=False)
-phatDataset.to_csv('phatDataset', index=True )
+Dataset.to_csv('NormaliseDataset', index=True )
+
+# rowDataset to csv
+rowDataset.to_csv('rowDataset', index=True )
 
 
-read_csv = pd.read_csv('phatDataset')
+read_csv = pd.read_csv('NormaliseDataset')
+
+
+# =========================================TESTING Plotting================================================
+
+# test = Dataset.ECG.values
+
+
+# wfdb.plot_items(signal=test, fs=128, time_units='seconds', ecg_grids='mV', title="ECG Records")
+# ================================================================================================
