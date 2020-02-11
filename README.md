@@ -8,7 +8,8 @@ This is a group project from Academy of Information Technology(AIT).
 In this project, we are trying to predict different arrhythmia on ECG.  
 We will be using the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/) that contains 48 half-hour excerpts of two-channel ambulatory ECG recordings, obtained from 47 subjects studied by the BIH Arrhythmia Laboratory between 1975 and 1979.
 
-  Arrtythmia Dataset   
+**Arrtythmia Dataset:** 
+
     Number of Samples: 109446  
     Number of Categories: 5  
     Sampling Frequency: 125Hz  
