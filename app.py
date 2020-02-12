@@ -14,7 +14,7 @@ def return_prediction(model, sample):
     Returns:
         string -- Returns the predictions
     """
-    classes = np.array(['Normal beat', 'Supraventricular premature beat', 'Premature ventricular contraction',
+    classes = np.array(['Normal bea t', 'Supraventricular premature beat', 'Premature ventricular contraction',
                         'Fusion of ventricular and normal beat', 'Unclassifiable beat'])
     y_pred = model.predict(sample)
     predict = np.argmax(y_pred, axis=1)
