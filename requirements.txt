@@ -1,6 +1,6 @@
 keras
 tensorflow
-
+gunicorn
 flask
 pandas
 numpy
