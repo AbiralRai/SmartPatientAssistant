@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 from tensorflow.keras.models import load_model
 
-
 def return_prediction(model, sample):
     """Return a prediction for heart classification
 
@@ -14,11 +13,16 @@ def return_prediction(model, sample):
     Returns:
         string -- Returns the predictions
     """
-    classes = np.array(['Normal bea t', 'Supraventricular premature beat', 'Premature ventricular contraction',
-                        'Fusion of ventricular and normal beat', 'Unclassifiable beat'])
-    y_pred = model.predict(sample)
-    predict = np.argmax(y_pred, axis=1)
-    return classes[predict]
+    SAMPLE_NUMBER = 186
+    
+    if (SAMPLE_NUMBER != sample.size  ):
+        return ["Invaild Sample Size"]
+    else:
+        classes = np.array(['Normal beat', 'Supraventricular premature beat', 'Premature ventricular contraction',
+                            'Fusion of ventricular and normal beat', 'Unclassifiable beat'])
+        y_pred = model.predict(sample)
+        predict = np.argmax(y_pred, axis=1)
+        return classes[predict]
 
 
 heart_model = load_model('heart_model.h5')
