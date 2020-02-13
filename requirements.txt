@@ -4,5 +4,4 @@ gunicorn
 flask
 pandas
 numpy
-os
 werkzeug
