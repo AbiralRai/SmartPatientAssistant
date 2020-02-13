@@ -38,12 +38,12 @@
   
   <div class="container w-50 py-5">
     
-    <form action="{{url_for('index')}}" method="POST" class="was-validated clearfix">
+    <form action="{{url_for('index')}}" method="POST" enctype=multipart/form-data class="was-validated clearfix">
       <div class="form-group">
         <label for="exampleFormControlFile1">CSV ECG file </label>
         <p class="badge badge-info">186 Sample</p>
         <input type="file" class="form-control-file form-control form-control-lg" id="exampleFormControlFile1"
-          name="sample" accept=".csv" required />
+          name="file" accept=".csv" required />
       </div>
       <button type="submit" class="btn btn-primary btn-lg active  float-sm-right" role="button" aria-pressed="true">
         Submit
