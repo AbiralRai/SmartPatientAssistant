@@ -25,7 +25,7 @@ We will be using the [MIT-BIH Arrhythmia Database](https://physionet.org/content
     -F : Fusion Beats  
     -Q : Unknown Beats  
 
-    Link: https://www.kaggle.com/shayanfazeli/heartbeat
+Link: https://www.kaggle.com/shayanfazeli/heartbeat
    
 
 # Testing
