@@ -3,6 +3,9 @@
 AIT group project,  
 This is a group project from Academy of Information Technology(AIT).
 
+# Link
+Smart Patient Assistant: https://smart-patient-assistant.herokuapp.com/
+
 ## Introduction
 
 In this project, we are trying to predict different arrhythmia on ECG.  
@@ -21,6 +24,8 @@ We will be using the [MIT-BIH Arrhythmia Database](https://physionet.org/content
     -V : Ventricular ectopic beats  
     -F : Fusion Beats  
     -Q : Unknown Beats  
+
+    Link: https://www.kaggle.com/shayanfazeli/heartbeat
    
 
 # Testing
